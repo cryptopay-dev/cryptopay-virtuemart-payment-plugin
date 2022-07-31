@@ -1,1 +1,1 @@
-# cryptopay-virtuemart-payment-plugin
+# Cryptopay payment plugin for Virtuemart

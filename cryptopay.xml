@@ -2,56 +2,27 @@
 
 <extension version="3.0" type="plugin" group="vmpayment" method="upgrade">
     <name>VM Payment - Cryptocurrency Payments via Cryptopay</name>
-    <creationDate>August 10th 2016</creationDate>
+    <creationDate>August 1 2022</creationDate>
     <author>Cryptopay</author>
     <authorUrl>https://www.cryptopay.me</authorUrl>
     <copyright>Copyright (C) 2022</copyright>
     <license>http://opensource.org/licenses/MIT</license>
     <version>1.0.0</version>
     <description>Cryptopay Payment Plugin</description>
+
+    <languages>
+        <language tag="en-GB">language/en-GB.plg_vmpayment_cryptopay.ini</language>
+    </languages>
+
     <files>
         <filename plugin="cryptopay">cryptopay.php</filename>
         <folder>language</folder>
+        <folder>fields</folder>
     </files>
-    <params addpath="/administrator/components/com_virtuemart/elements">
-        <param type="spacer" default="VMPAYMENT_CRYPTOPAY_CREDENTIALS_LABEL" level="level1"/>
-        <param name="environment" type="list" default="live" label="VMPAYMENT_CRYPTOPAY_ENVIRONMENT_LABEL"
-               description="VMPAYMENT_CRYPTOPAY_ENVIRONMENT_DESCRIPTION">
-            <option value="live">VMPAYMENT_CRYPTOPAY_PRODUCTION_ENVIRONMENT_LABEL</option>
-            <option value="sandbox">VMPAYMENT_CRYPTOPAY_SANDBOX_ENVIRONMENT_LABEL</option>
-        </param>
-        <param name="widget_key" type="text"
-               label="VMPAYMENT_CRYPTOPAY_WIDGET_KEY_LABEL"
-               description="VMPAYMENT_CRYPTOPAY_WIDGET_KEY_DESCRIPTION"/>
-        <param name="callback_url" type="text"
-               label="VMPAYMENT_CRYPTOPAY_CALLBACK_URL_LABEL"
-               description="VMPAYMENT_CRYPTOPAY_CALLBACK_URL_DESCRIPTION"/>
-        <param name="callback_secret" type="text"
-               label="VMPAYMENT_CRYPTOPAY_CALLBACK_SECRET_LABEL"
-               description="VMPAYMENT_CRYPTOPAY_CALLBACK_SECRET_DESCRIPTION"/>
-        <param name="qr_code" type="checkbox" default="0"
-               label="VMPAYMENT_CRYPTOPAY_QR_CODE_LABEL"
-               description="VMPAYMENT_CRYPTOPAY_QR_CODE_DESCRIPTION"/>
-        <param name="theme" type="list" default="light"
-               label="VMPAYMENT_CRYPTOPAY_THEME_LABEL"
-               description="VMPAYMENT_CRYPTOPAY_THEME_DESCRIPTION">
-            <option value="light">VMPAYMENT_CRYPTOPAY_LIGHT_THEME_LABEL</option>
-            <option value="dark">VMPAYMENT_CRYPTOPAY_DARK_THEME_LABEL</option>
-        </param>
-        <param name="pending_status" type="vmorderstate" scope="com_virtuemart"
-               label="VMPAYMENT_CRYPTOPAY_PENDING_STATUS_LABEL"
-               description="VMPAYMENT_CRYPTOPAY_PENDING_STATUS_DESCRIPTION"/>
-        <param name="paid_status" type="vmorderstate" scope="com_virtuemart"
-               label="VMPAYMENT_CRYPTOPAY_PAID_STATUS_LABEL"
-               description="VMPAYMENT_CRYPTOPAY_PAID_STATUS_DESCRIPTION"/>
-        <param name="canceled_status" type="vmorderstate" scope="com_virtuemart"
-               label="VMPAYMENT_CRYPTOPAY_CANCELED_STATUS_LABEL"
-               description="VMPAYMENT_CRYPTOPAY_CANCELED_STATUS_DESCRIPTION"/>
-    </params>
 
-    <config>
-        <fields name="vmconfig">
-            <fieldset name="payment" addfieldpath="/administrator/components/com_virtuemart/fields">
+    <vmconfig>
+        <fields name="params">
+            <fieldset name="basic" addfieldpath="/plugins/vmpayment/cryptopay/fields">
                 <field type="spacer" default="VMPAYMENT_CRYPTOPAY_CREDENTIALS_LABEL" level="level1"/>
                 <field name="environment" type="list" default="live" label="VMPAYMENT_CRYPTOPAY_ENVIRONMENT_LABEL"
                        description="VMPAYMENT_CRYPTOPAY_ENVIRONMENT_DESCRIPTION">
@@ -65,8 +36,8 @@
                        description="VMPAYMENT_CRYPTOPAY_WIDGET_KEY_DESCRIPTION"/>
                 <field type="vmtitle"
                        description="VMPAYMENT_CRYPTOPAY_WIDGET_KEY_DESCRIPTION"/>
-                <field name="callback_url"
-                       type="callback"
+                <field type="callback"
+                       level="level1"
                        size="100"
                        disabled="true"
                        label="VMPAYMENT_CRYPTOPAY_CALLBACK_URL_LABEL"/>
@@ -109,5 +80,11 @@
                        description="VMPAYMENT_CRYPTOPAY_CANCELED_STATUS_DESCRIPTION"/>
             </fieldset>
         </fields>
-    </config>
+    </vmconfig>
+
+    <updateservers>
+        <server type="extension" name="VirtueMart plg_vmpayment_cryptopay Update Site">
+            <![CDATA[http://virtuemart.net/releases/vm3/plg_vmpayment_cryptopay_update.xml]]>
+        </server>
+    </updateservers>
 </extension>

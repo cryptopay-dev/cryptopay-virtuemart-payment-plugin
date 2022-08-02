@@ -20,9 +20,14 @@
 defined('JPATH_BASE') or die();
 
 jimport('joomla.form.formfield');
-
 class JFormFieldCallbackUrl extends JFormField {
 
+    /**
+     * Element name
+     *
+     * @access    protected
+     * @var        string
+     */
     var $type = 'callback';
 
     protected function getInput() {

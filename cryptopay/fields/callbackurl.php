@@ -28,12 +28,12 @@ class JFormFieldCallbackUrl extends JFormField {
      * @access    protected
      * @var        string
      */
-    var $type = 'callback';
+    var $type = 'callbackUrl';
 
     protected function getInput() {
-        $callbackUrl = JURI::root() . 'index.php?option=com_virtuemart&view=vmplg&task=notify&nt=ipn&tmpl=component&pm=cryptopay';
+        vmJsApi::addJScript( '/plugins/vmpayment/cryptopay/cryptopay/assets/js/admin.js');
 
-        $string = '<div>' . $callbackUrl . '</div>';
-        return $string;
+        $callbackUrl = JURI::root() . 'index.php?option=com_virtuemart&view=vmplg&task=notify&nt=ipn&tmpl=component&pm=cryptopay';
+         return '<div style="display:flex;"><div id="callbackCopy" style="cursor:pointer;" class="icon-copy"></div><div id="callbackUrl">' . $callbackUrl . '</div></div>';
     }
 }

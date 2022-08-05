@@ -17,29 +17,24 @@
     <files>
         <filename plugin="cryptopay">cryptopay.php</filename>
         <folder>language</folder>
-        <folder>fields</folder>
+        <folder>cryptopay</folder>
     </files>
 
     <vmconfig>
         <fields name="params">
-            <fieldset name="basic" addfieldpath="/plugins/vmpayment/cryptopay/fields">
+            <fieldset name="fields" addfieldpath="/administrator/components/com_virtuemart/fields"/>
+            <fieldset name="cryptopay" addfieldpath="/plugins/vmpayment/cryptopay/cryptopay/fields">
                 <field type="spacer" default="VMPAYMENT_CRYPTOPAY_CREDENTIALS_LABEL" level="level1"/>
                 <field name="environment" type="list" default="live" label="VMPAYMENT_CRYPTOPAY_ENVIRONMENT_LABEL"
                        description="VMPAYMENT_CRYPTOPAY_ENVIRONMENT_DESCRIPTION">
                     <option value="live">VMPAYMENT_CRYPTOPAY_PRODUCTION_ENVIRONMENT_LABEL</option>
                     <option value="sandbox">VMPAYMENT_CRYPTOPAY_SANDBOX_ENVIRONMENT_LABEL</option>
                 </field>
-                <field type="vmtitle"
-                       description="VMPAYMENT_CRYPTOPAY_ENVIRONMENT_DESCRIPTION"/>
                 <field name="widget_key" type="text"
-                       label="VMPAYMENT_CRYPTOPAY_WIDGET_KEY_LABEL"
-                       description="VMPAYMENT_CRYPTOPAY_WIDGET_KEY_DESCRIPTION"/>
+                       label="VMPAYMENT_CRYPTOPAY_WIDGET_KEY_LABEL"/>
                 <field type="vmtitle"
                        description="VMPAYMENT_CRYPTOPAY_WIDGET_KEY_DESCRIPTION"/>
-                <field type="callback"
-                       level="level1"
-                       size="100"
-                       disabled="true"
+                <field type="callbackurl"
                        label="VMPAYMENT_CRYPTOPAY_CALLBACK_URL_LABEL"/>
                 <field type="vmtitle"
                        description="VMPAYMENT_CRYPTOPAY_CALLBACK_URL_DESCRIPTION_FIRST"/>
@@ -48,12 +43,8 @@
                 <field name="callback_secret" type="text"
                        label="VMPAYMENT_CRYPTOPAY_CALLBACK_SECRET_LABEL"
                        description="VMPAYMENT_CRYPTOPAY_CALLBACK_SECRET_DESCRIPTION"/>
-                <field type="vmtitle"
-                       description="VMPAYMENT_CRYPTOPAY_CALLBACK_SECRET_DESCRIPTION"/>
                 <field name="qr_code" type="checkbox" default="0"
                        label="VMPAYMENT_CRYPTOPAY_QR_CODE_LABEL"
-                       description="VMPAYMENT_CRYPTOPAY_QR_CODE_DESCRIPTION"/>
-                <field type="vmtitle"
                        description="VMPAYMENT_CRYPTOPAY_QR_CODE_DESCRIPTION"/>
                 <field name="theme" type="list" default="light"
                        label="VMPAYMENT_CRYPTOPAY_THEME_LABEL"
@@ -61,22 +52,14 @@
                     <option value="light">VMPAYMENT_CRYPTOPAY_LIGHT_THEME_LABEL</option>
                     <option value="dark">VMPAYMENT_CRYPTOPAY_DARK_THEME_LABEL</option>
                 </field>
-                <field type="vmtitle"
-                       description="VMPAYMENT_CRYPTOPAY_THEME_DESCRIPTION"/>
                 <field name="pending_status" type="vmorderstate" scope="com_virtuemart"
                        label="VMPAYMENT_CRYPTOPAY_PENDING_STATUS_LABEL"
-                       description="VMPAYMENT_CRYPTOPAY_PENDING_STATUS_DESCRIPTION"/>
-                <field type="vmtitle"
                        description="VMPAYMENT_CRYPTOPAY_PENDING_STATUS_DESCRIPTION"/>
                 <field name="paid_status" type="vmorderstate" scope="com_virtuemart"
                        label="VMPAYMENT_CRYPTOPAY_PAID_STATUS_LABEL"
                        description="VMPAYMENT_CRYPTOPAY_PAID_STATUS_DESCRIPTION"/>
-                <field type="vmtitle"
-                       description="VMPAYMENT_CRYPTOPAY_PAID_STATUS_DESCRIPTION"/>
                 <field name="canceled_status" type="vmorderstate" scope="com_virtuemart"
                        label="VMPAYMENT_CRYPTOPAY_CANCELED_STATUS_LABEL"
-                       description="VMPAYMENT_CRYPTOPAY_CANCELED_STATUS_DESCRIPTION"/>
-                <field type="vmtitle"
                        description="VMPAYMENT_CRYPTOPAY_CANCELED_STATUS_DESCRIPTION"/>
             </fieldset>
         </fields>

@@ -14,8 +14,10 @@ class plgVmPaymentCryptopay extends vmPSPlugin
     {
         parent::__construct($subject, $config);
 
-        $this->_loggable = true;
+        $this->_loggable = TRUE;
         $this->tableFields = array_keys($this->getTableSQLFields());
+        $this->_tablepkey = 'id';
+        $this->_tableId = 'id';
         $varsToPush = $this->getVarsToPush();
 
         $this->setConfigParameterable($this->_configTableFieldName, $varsToPush);
@@ -172,47 +174,10 @@ class plgVmPaymentCryptopay extends vmPSPlugin
     }
 
     /**
-     * This function is used If user redirection to the Payment gateway is required.
-     * You can use this function as redirect URL for the payment gateway and
-     * receive response from payment gateway here.
-     */
-    function plgVmOnPaymentResponseReceived(&$html)
-    {
-        if (!class_exists('VirtueMartCart'))
-            require(JPATH_VM_SITE . DS . 'helpers' . DS . 'cart.php');
-
-        if (!class_exists('shopFunctionsF'))
-            require(JPATH_VM_SITE . DS . 'helpers' . DS . 'shopfunctionsf.php');
-
-        if (!class_exists('VirtueMartModelOrders'))
-            require(JPATH_VM_ADMINISTRATOR . DS . 'models' . DS . 'orders.php');
-
-        $virtuemart_paymentmethod_id = JRequest::getInt('pm', 0);
-        $order_number = JRequest::getString('on', 0);
-        $vendorId = 0;
-
-        if (!($method = $this->getVmPluginMethod($virtuemart_paymentmethod_id)))
-            return NULL;
-
-        if (!$this->selectedThisElement($method->payment_element))
-            return NULL;
-
-        if (!($virtuemart_order_id = VirtueMartModelOrders::getOrderIdByOrderNumber($order_number)))
-            return NULL;
-
-        if (!($paymentTable = $this->getDataByOrderId($virtuemart_order_id)))
-            return '';
-
-        $payment_name = $this->renderPluginName($method);
-        $html = $this->_getPaymentResponseHtml($paymentTable, $payment_name);
-
-        return TRUE;
-    }
-
-    /**
      * Callback function
      */
-    function plgVmOnPaymentNotification() {
+    function plgVmOnPaymentNotification()
+    {
         try {
             $request = file_get_contents('php://input');
             $body = json_decode($request, true);
@@ -240,16 +205,16 @@ class plgVmPaymentCryptopay extends vmPSPlugin
             }
 
             if (!$this->selectedThisElement($method->payment_element))
-                return false;
+                return 'it is not the correct element';
 
             if ($data['status'] == 'new') {
                 $this->updateOrderStatus($method->pending_status, $virtuemartOrderId, $order);
-                return;
+                return 'Update to pending';
             }
 
             if ($data['status'] == 'completed' || $data['status'] == 'unresolved' && $data['status_context'] == 'overpaid') {
                 $this->updateOrderStatus($method->paid_status, $virtuemartOrderId, $order);
-                return;
+                return 'Update to paid';
             }
 
             if ($data['status'] == 'cancelled' || $data['status'] == 'refunded' || $data['status'] == 'unresolved') {
@@ -280,8 +245,8 @@ class plgVmPaymentCryptopay extends vmPSPlugin
         if (!class_exists('VirtueMartModelCurrency'))
             require(JPATH_VM_ADMINISTRATOR . DS . 'models' . DS . 'currency.php');
 
-        VmConfig::loadJLang('com_virtuemart', true);
-        VmConfig::loadJLang('com_virtuemart_orders', true);
+        vmLanguage::loadJLang('com_virtuemart', true);
+        vmLanguage::loadJLang('com_virtuemart_orders', true);
 
         $orderID = $order['details']['BT']->virtuemart_order_id;
 
@@ -291,12 +256,6 @@ class plgVmPaymentCryptopay extends vmPSPlugin
         $orderModel['virtuemart_order_id'] = $orderID;
         $orderModel['customer_notified'] = 1;
         $modelOrder->updateStatusForOneOrder($orderID, $orderModel, true);
-
-        $modelOrder = new VirtueMartModelOrders();
-        $order['order_status'] = $method->paid_status;
-        $order['virtuemart_order_id'] = $orderID;
-        $order['customer_notified'] = 1;
-        $modelOrder->updateStatusForOneOrder($orderID, $order, true);
 
         $currency_code_3 = shopFunctions::getCurrencyByID($method->currency_id, 'currency_code_3');
 
@@ -320,7 +279,7 @@ class plgVmPaymentCryptopay extends vmPSPlugin
 
         $url = $redirectUrl . '?' . http_build_query($params);
         header('Location: ' . $url);
-        // $cart->emptyCart();
+        $cart->emptyCart();
         exit;
     }
 
@@ -337,7 +296,8 @@ class plgVmPaymentCryptopay extends vmPSPlugin
     /**
      * Update order status
      */
-    private function updateOrderStatus($status, $virtuemartOrderId, $order) {
+    private function updateOrderStatus($status, $virtuemartOrderId, $order)
+    {
         $modelOrder = new VirtueMartModelOrders();
         $order['order_status'] = $status;
         $order['virtuemart_order_id'] = $virtuemartOrderId;

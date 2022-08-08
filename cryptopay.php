@@ -3,8 +3,6 @@
 defined('_JEXEC') or die('Restricted access');
 define('CRYPTOPAY_VIRTUEMART_EXTENSION_VERSION', '1.0.0');
 
-//require_once('lib/Cryptopay/init.php'); // ??
-
 if (!class_exists('vmPSPlugin'))
     require(JPATH_VM_PLUGINS . DS . 'vmpsplugin.php');
 
@@ -265,7 +263,7 @@ class plgVmPaymentCryptopay extends vmPSPlugin
         $params = array(
             'customId' => 'virtuemart_order_' . $orderID,
             'widgetKey' => $method->widget_key,
-            'isShowQr' => $method->qr_code,
+            'isShowQr' => $method->qr_code == 1 ? 'true' : 'false',
             'theme' => $method->theme,
             'priceCurrency' => $currency_code_3,
             'priceAmount' => $totalInCurrency,

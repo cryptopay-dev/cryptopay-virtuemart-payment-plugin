@@ -267,8 +267,8 @@ class plgVmPaymentCryptopay extends vmPSPlugin
             'theme' => $method->theme,
             'priceCurrency' => $currency_code_3,
             'priceAmount' => $totalInCurrency,
-            'successRedirectUrl' => (JROUTE::_(JURI::root() . 'index.php?option=com_virtuemart&view=cart')),
-            'unsuccessRedirectUrl' => (JROUTE::_(JURI::root() . 'index.php?option=com_virtuemart&view=cart')),
+            'successRedirectUrl' => JROUTE::_(JURI::root() . 'index.php?option=com_virtuemart&view=pluginresponse&task=pluginresponsereceived&on=' . $this->$order['details']['BT']->order_number . '&pm=' . $this->$order['details']['BT']->virtuemart_paymentmethod_id),
+            'unsuccessRedirectUrl' => (JROUTE::_(JURI::root() . 'index.php?option=com_virtuemart&view=pluginresponse&task=pluginUserPaymentCancel&on=' . $this->$order['details']['BT']->order_number . '&pm=' . $this->$order['details']['BT']->virtuemart_paymentmethod_id))
         );
 
         $redirectUrl = $method->environment == 'sandbox'
@@ -277,8 +277,23 @@ class plgVmPaymentCryptopay extends vmPSPlugin
 
         $url = $redirectUrl . '?' . http_build_query($params);
         header('Location: ' . $url);
-        $cart->emptyCart();
+//        $cart->emptyCart();
         exit;
+    }
+
+    /**
+     * This event is fired when the  method returns to the shop after the transaction
+     * @param $html
+     * @return bool|null
+     */
+    function plgVmOnPaymentResponseReceived(&$html)
+    {
+        if (!class_exists('VirtueMartCart'))
+            require(JPATH_VM_SITE . DS . 'helpers' . DS . 'cart.php');
+        $cart = VirtueMartCart::getCart();
+        $cart->emptyCart();
+
+        return true;
     }
 
     /**

@@ -40,7 +40,7 @@ class JFormFieldCallbackUrl extends JFormField {
             $virtuemart_paymentmethod_id = $cid;
         }
 
-        $callbackUrl = JURI::root() . 'index.php?option=com_virtuemart&view=vmplg&task=notify&nt=ipn&tmpl=component&pm=' . $virtuemart_paymentmethod_id;
+        $callbackUrl = JURI::root() . 'index.php?option=com_virtuemart&view=pluginresponse&task=pluginnotification&pm=' . $virtuemart_paymentmethod_id;
          return '<div style="display:flex;"><div id="callbackCopy" style="cursor:pointer;" class="icon-copy"></div><div id="callbackUrl">' . $callbackUrl . '</div></div>';
     }
 }

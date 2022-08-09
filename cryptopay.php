@@ -176,53 +176,52 @@ class plgVmPaymentCryptopay extends vmPSPlugin
      */
     function plgVmOnPaymentNotification()
     {
-        try {
-            $request = file_get_contents('php://input');
-            $body = json_decode($request, true);
+        $request = file_get_contents('php://input');
+        $body = json_decode($request, true);
 
-            if ($body['type'] != 'Invoice') {
-                return 'It is not Invoice';
-            }
-
-            $data = $body['data'];
-            $virtuemartOrderId = str_replace(
-                'virtuemart_order_',
-                '',
-                'virtuemart_order_' . $data['custom_id']
-            );
-
-            $modelOrder = VmModel::getModel('orders');
-            $order = $modelOrder->getOrder($virtuemartOrderId);
-
-            if (!$order)
-                throw new Exception('Order #' . $virtuemartOrderId . ' does not exists');
-            $method = $this->getVmPluginMethod($order['details']['BT']->virtuemart_paymentmethod_id);
-
-            if (!$this->validateCallback($request, $_SERVER['HTTP_X_CRYPTOPAY_SIGNATURE'], $method)) {
-                return 'Webhook validation failed.';
-            }
-
-            if (!$this->selectedThisElement($method->payment_element))
-                return 'it is not the correct element';
-
-            if ($data['status'] == 'new') {
-                $this->updateOrderStatus($method->pending_status, $virtuemartOrderId, $order);
-                return 'Update to pending';
-            }
-
-            if ($data['status'] == 'completed' || $data['status'] == 'unresolved' && $data['status_context'] == 'overpaid') {
-                $this->updateOrderStatus($method->paid_status, $virtuemartOrderId, $order);
-                return 'Update to paid';
-            }
-
-            if ($data['status'] == 'cancelled' || $data['status'] == 'refunded' || $data['status'] == 'unresolved') {
-                $this->updateOrderStatus($method->canceled_status, $virtuemartOrderId, $order);
-            }
-
-            return 'success';
-        } catch (\Exception $e) {
-            return 'Webhook receive error.';
+        if (!isset($body) || $body['type'] != 'Invoice') {
+            return NULL;
         }
+
+        $data = $body['data'];
+        $virtuemartOrderId = str_replace(
+            'virtuemart_order_',
+            '',
+            'virtuemart_order_' . $data['custom_id']
+        );
+
+        $modelOrder = VmModel::getModel('orders');
+        $order = $modelOrder->getOrder($virtuemartOrderId);
+
+        if (!$order) {
+            return NULL;
+        }
+        $method = $this->getVmPluginMethod($order['details']['BT']->virtuemart_paymentmethod_id);
+
+        if (!$this->validateCallback($request, $_SERVER['HTTP_X_CRYPTOPAY_SIGNATURE'], $method)) {
+            return NULL;
+        }
+
+        if (!$this->selectedThisElement($method->payment_element)) {
+            return NULL;
+        }
+
+        if ($data['status'] == 'new') {
+            $this->updateOrderStatus($method->pending_status, $virtuemartOrderId, $order);
+            return NULL;
+        }
+
+        if ($data['status'] == 'completed' || $data['status'] == 'unresolved' && $data['status_context'] == 'overpaid') {
+            $this->updateOrderStatus($method->paid_status, $virtuemartOrderId, $order);
+            return NULL;
+        }
+
+        if ($data['status'] == 'cancelled' || $data['status'] == 'refunded' || $data['status'] == 'unresolved') {
+            $this->updateOrderStatus($method->canceled_status, $virtuemartOrderId, $order);
+            return NULL;
+        }
+
+        die();
     }
 
     /**
@@ -277,7 +276,7 @@ class plgVmPaymentCryptopay extends vmPSPlugin
 
         $url = $redirectUrl . '?' . http_build_query($params);
         header('Location: ' . $url);
-//        $cart->emptyCart();
+        // $cart->emptyCart();
         exit;
     }
 

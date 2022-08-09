@@ -186,9 +186,9 @@ class plgVmPaymentCryptopay extends vmPSPlugin
 
             $data = $body['data'];
             $virtuemartOrderId = str_replace(
-                'magento_order_',
-                "",
-                'magento_order_' . $data['custom_id']
+                'virtuemart_order_',
+                '',
+                'virtuemart_order_' . $data['custom_id']
             );
 
             $modelOrder = VmModel::getModel('orders');

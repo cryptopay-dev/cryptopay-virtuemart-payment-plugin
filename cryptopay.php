@@ -266,8 +266,8 @@ class plgVmPaymentCryptopay extends vmPSPlugin
             'theme' => $method->theme,
             'priceCurrency' => $currency_code_3,
             'priceAmount' => $totalInCurrency,
-            'successRedirectUrl' => JROUTE::_(JURI::root() . 'index.php?option=com_virtuemart&view=pluginresponse&task=pluginresponsereceived&on=' . $this->$order['details']['BT']->order_number . '&pm=' . $this->$order['details']['BT']->virtuemart_paymentmethod_id),
-            'unsuccessRedirectUrl' => (JROUTE::_(JURI::root() . 'index.php?option=com_virtuemart&view=pluginresponse&task=pluginUserPaymentCancel&on=' . $this->$order['details']['BT']->order_number . '&pm=' . $this->$order['details']['BT']->virtuemart_paymentmethod_id))
+            'successRedirectUrl' => (JROUTE::_(JURI::root() . 'index.php?option=com_virtuemart&view=pluginresponse&task=pluginresponsereceived&on=' . $order['details']['BT']->order_number . '&pm=' . $order['details']['BT']->virtuemart_paymentmethod_id)),
+            'unsuccessRedirectUrl' => (JROUTE::_(JURI::root() . 'index.php?option=com_virtuemart&view=pluginresponse&task=pluginUserPaymentCancel&on=' . $orderID . '&pm=' . $order['details']['BT']->virtuemart_paymentmethod_id))
         );
 
         $redirectUrl = $method->environment == 'sandbox'
@@ -291,7 +291,19 @@ class plgVmPaymentCryptopay extends vmPSPlugin
             require(JPATH_VM_SITE . DS . 'helpers' . DS . 'cart.php');
         $cart = VirtueMartCart::getCart();
         $cart->emptyCart();
+        return true;
+    }
 
+    /**
+     * This event is fired when the  method returns to the shop after failed transaction
+     * @return bool
+     */
+    function plgVmOnUserPaymentCancel()
+    {
+        if (!class_exists('VirtueMartModelOrders'))
+            require(JPATH_VM_ADMINISTRATOR . DS . 'models' . DS . 'orders.php');
+        $orderId = vRequest::getVar('on');
+        $this->handlePaymentUserCancel($orderId);
         return true;
     }
 

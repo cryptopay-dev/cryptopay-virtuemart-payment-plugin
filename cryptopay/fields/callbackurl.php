@@ -33,14 +33,7 @@ class JFormFieldCallbackUrl extends JFormField {
     protected function getInput() {
         vmJsApi::addJScript( '/plugins/vmpayment/cryptopay/cryptopay/assets/js/admin.js');
 
-        $cid = vRequest::getvar('cid', NULL, 'array');
-        if (is_Array($cid)) {
-            $virtuemart_paymentmethod_id = $cid[0];
-        } else {
-            $virtuemart_paymentmethod_id = $cid;
-        }
-
-        $callbackUrl = JURI::root() . 'index.php?option=com_virtuemart&view=pluginresponse&task=pluginnotification&pm=' . $virtuemart_paymentmethod_id;
-         return '<div style="display:flex;"><div id="callbackCopy" style="cursor:pointer;" class="icon-copy"></div><div id="callbackUrl">' . $callbackUrl . '</div></div>';
+        $callbackUrl = JURI::root() . 'index.php?option=com_virtuemart&view=pluginresponse&task=pluginnotification&pm=cryptopay';
+        return '<div style="display:flex;"><div id="callbackCopy" style="cursor:pointer;" class="icon-copy"></div><div id="callbackUrl">' . $callbackUrl . '</div></div>';
     }
 }

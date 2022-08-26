@@ -2,7 +2,7 @@
  *
  * Cryptopay payment plugin
  *
- * @author Vasif Shabiev
+ * @author Cryptopay
  * @version $Id: paypal.php 7217 2013-09-18 13:42:54Z alatak $
  * @package VirtueMart
  * @subpackage payment

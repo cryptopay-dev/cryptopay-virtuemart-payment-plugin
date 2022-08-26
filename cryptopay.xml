@@ -11,7 +11,7 @@
     <description>Cryptopay Payment Plugin</description>
 
     <languages>
-        <language tag="en-GB">language/en-GB.plg_vmpayment_cryptopay.ini</language>
+        <language tag="en-GB">language/en-GB/en-GB.plg_vmpayment_cryptopay.ini</language>
     </languages>
 
     <files>
